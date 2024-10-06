@@ -3,29 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Домашнее Задание Vue #01</title>
+    <title>Vue Задание с Товарами</title>
   </head>
   <body>
     <div id="app">
-      <!-- Кнопка "Перевернуть" -->
-      <button @click="reverseText">{{ buttonText }}</button>
+      <!-- Сортировка товаров -->
+      <label>Сортировать по цене:</label>
+      <button @click="sortProducts('asc')">По возрастанию</button>
+      <button @click="sortProducts('desc')">По убыванию</button>
 
-      <br />
-      <br />
+      <br /><br />
 
-      <!-- Список элементов -->
+      <!-- Список товаров -->
       <ul>
-        <li
-          :key="index"
-          @click="removeItem(index)"
-          v-for="(item, index) in items"
-        >
-          {{ item }}
+        <li v-for="(product, index) in sortedProducts" :key="index">
+          {{ product.name }} - {{ product.price }} ₽
+          <button @click="removeProduct(index)">Удалить</button>
         </li>
       </ul>
 
-      <!-- Кнопка "Добавить" -->
-      <button @click="addItem">Добавить</button>
+      <!-- Кнопка "Добавить товар" -->
+      <button @click="addProduct">Добавить товар</button>
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -34,21 +32,40 @@
         data() {
           return {
             buttonText: "Перевернуть",
-            items: ["Элемент 1", "Элемент 2", "Элемент 3"], // Начальный список элементов
+            sortOrder: "asc", // порядок сортировки
+            products: [
+              { name: "Товар 1", price: 100 },
+              { name: "Товар 2", price: 200 },
+              { name: "Товар 3", price: 50 },
+            ],
           };
         },
+        computed: {
+          sortedProducts() {
+            // Сортировка товаров по цене
+            return this.products.sort((a, b) => {
+              return this.sortOrder === "asc"
+                ? a.price - b.price
+                : b.price - a.price;
+            });
+          },
+        },
         methods: {
-          // Переворот текста кнопки
           reverseText() {
             this.buttonText = this.buttonText.split("").reverse().join("");
           },
-          // Добавление нового элемента
-          addItem() {
-            this.items.push("Новый элемент списка");
+          addProduct() {
+            // Добавление нового товара с фиксированным названием и ценой
+            this.products.push({
+              name: "Новый товар",
+              price: Math.floor(Math.random() * 300) + 50,
+            });
           },
-          // Удаление элемента по индексу
-          removeItem(index) {
-            this.items.splice(index, 1);
+          removeProduct(index) {
+            this.products.splice(index, 1); // Удаление товара по индексу
+          },
+          sortProducts(order) {
+            this.sortOrder = order; // Изменение порядка сортировки
           },
         },
       });
