@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Домашнее Задание Vue #01</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- Кнопка "Перевернуть" -->
+      <button @click="reverseText">{{ buttonText }}</button>
+
+      <br />
+      <br />
+
+      <!-- Список элементов -->
+      <ul>
+        <li
+          :key="index"
+          @click="removeItem(index)"
+          v-for="(item, index) in items"
+        >
+          {{ item }}
+        </li>
+      </ul>
+
+      <!-- Кнопка "Добавить" -->
+      <button @click="addItem">Добавить</button>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const app = Vue.createApp({
+        data() {
+          return {
+            buttonText: "Перевернуть",
+            items: ["Элемент 1", "Элемент 2", "Элемент 3"], // Начальный список элементов
+          };
+        },
+        methods: {
+          // Переворот текста кнопки
+          reverseText() {
+            this.buttonText = this.buttonText.split("").reverse().join("");
+          },
+          // Добавление нового элемента
+          addItem() {
+            this.items.push("Новый элемент списка");
+          },
+          // Удаление элемента по индексу
+          removeItem(index) {
+            this.items.splice(index, 1);
+          },
+        },
+      });
+
+      app.mount("#app");
+    </script>
+  </body>
+</html>
